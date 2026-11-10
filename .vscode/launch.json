@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
     "configurations": [
         {
             "name": "C/C++: cl.exe Compilar e depurar o arquivo ativo",
@@ -14,4 +15,28 @@
         }
     ],
     "version": "2.0.0"
+=======
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "cppdbg",
+      "request": "launch",
+      "args": [],
+      "stopAtEntry": false,
+      "externalConsole": true,
+      "cwd": "c:/Users/User/OneDrive/Documentos/GitHub/Back-end/.vscode",
+      "program": "c:/Users/User/OneDrive/Documentos/GitHub/Back-end/.vscode/build/Debug/outDebug",
+      "MIMode": "gdb",
+      "miDebuggerPath": "gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ]
+    }
+  ]
+>>>>>>> d4da179ab58ae728486fb3f3f61f48d171507cb8
 }
