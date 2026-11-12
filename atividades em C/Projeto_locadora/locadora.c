@@ -11,13 +11,16 @@ int main() {
 
     do {
 
-        printf("\n===== LOCADORA DE VEICULOS =====\n");
-        printf("1 - Cadastrar veiculo\n");
-        printf("2 - Listar veiculos\n");
-        printf("3 - Alugar veiculo\n");
-        printf("4 - Devolver veiculo\n");
-        printf("5 - Sair\n");
-
+        printf("  +==============================+\n");
+        printf("  |     LOCADORA DE VEICULOS     |\n");
+        printf("  +==============================+\n");
+        printf("  |    1 - Cadastrar veiculo     |\n");
+        printf("  |    2 - Listar veiculos       |\n");
+        printf("  |    3 - Alugar veiculo        |\n");
+        printf("  |    4 - Devolver veiculo      |\n");
+        printf("  |    5 - Sair                  |\n");
+        printf("  +==============================+\n");
+        
         printf("\nEscolha uma opcao: ");
         scanf("%d", &opcao);
 
