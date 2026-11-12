@@ -1,4 +1,21 @@
 {
+<<<<<<< HEAD
+    "configurations": [
+        {
+            "name": "C/C++: cl.exe Compilar e depurar o arquivo ativo",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "console": "integratedTerminal",
+            "preLaunchTask": "C/C++: cl.exe arquivo de build ativo"
+        }
+    ],
+    "version": "2.0.0"
+=======
   "version": "0.2.0",
   "configurations": [
     {
@@ -21,4 +38,5 @@
       ]
     }
   ]
+>>>>>>> d4da179ab58ae728486fb3f3f61f48d171507cb8
 }
