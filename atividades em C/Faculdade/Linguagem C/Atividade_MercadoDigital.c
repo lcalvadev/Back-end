@@ -1,472 +1,374 @@
-#include <stdio.h>   // biblioteca com printf, scanf e sprintf (entrada e saida)
-
-// ===================== ESTRUTURAS =====================
-
-struct telefones {        // registro que guarda os dois telefones do cliente
-    char fixo[15];        // texto do telefone fixo com mascara: "(11) 3210-1000" (14 letras + '\0')
-    char movel[16];       // texto do celular com mascara: "(11) 98765-4321" (15 letras + '\0')
-};                        // fim da struct telefones
-
-struct clientes {         // registro com os dados de um cliente
-    int codigo;           // codigo do cliente (6 primeiros digitos do CPF)
-    char nome[50];        // nome do cliente (ate 49 letras)
-    double cpf;           // CPF guardado como numero grande (tem 11 digitos)
-    char sexo;            // uma letra: M ou F
-    struct telefones tel; // telefones do cliente (struct dentro de struct)
-<<<<<<< HEAD
-};                        // fim da struct clientes
-=======
-};   
->>>>>>> 3d8c438833f509d42dc7d4e92a25fa5cb0a8c1b2
-
-struct modelos {          // registro com marca e modelo de um produto
-    char marca[20];       // marca do produto (ex.: DELL)
-    char modelo[20];      // modelo do produto (ex.: PRECISION)
-};                        // fim da struct modelos
-
-struct produtos {         // registro com os dados de um produto
-    int codigo;           // codigo do produto (calculado pelo hash)
-    char nome[20];        // nome do produto
-    struct modelos modelo;// marca e modelo do produto
-    double valor;         // preco unitario do produto
-};                        // fim da struct produtos
-
-struct carrinhos {                 // registro da venda que esta sendo feita
-    struct clientes cliente;       // cliente para quem a venda esta sendo feita
-    struct produtos produto[3];    // ate 3 tipos de produto no carrinho
-    int quantidade[3];             // quantidade de cada produto (mesma posicao do vetor produto)
-    double subtotal;               // soma de (quantidade * valor) de todos os itens
-    double desconto;               // desconto em porcentagem (10 significa 10%)
-    double total;                  // valor final: subtotal menos o desconto
-};                                 // fim da struct carrinhos
-
-// ===================== PROTOTIPOS =====================
-// Prototipo avisa ao compilador que a funcao existe, antes de ela ser escrita mais abaixo.
-
-void mostraMenuInicial();                                   // funcao que mostra o menu
-struct clientes cadastrarCliente();                         // le os dados e devolve um cliente
-int geraCodigoCliente(double cpf);                          // recebe o CPF e devolve o codigo
-void listarClientes(struct clientes cliente[3]);            // mostra todos os clientes
-struct produtos cadastrarProduto();                         // le os dados e devolve um produto
-int geraCodigoProduto(char nomeProduto[30]);                // recebe as 4 letras e devolve o codigo (hash)
-void listarProdutos(struct produtos produto[10]);           // mostra todos os produtos
-void efetuarVenda(struct clientes cliente[3], struct produtos produto[10], struct carrinhos carrinho); // monta a venda
-struct clientes localizaCliente(int codigo, struct clientes cliente[3]);   // procura cliente pelo codigo
-struct produtos localizaProduto(int codigo, struct produtos produto[10]);  // procura produto pelo codigo
-void finalizarVenda(struct carrinhos carrinho);             // pede desconto, calcula e mostra os totais
-void listarCarrinho(struct carrinhos carrinho);             // mostra cliente e itens do carrinho
-double calculaSubtotal(struct carrinhos carrinho);          // soma os itens do carrinho
-double calculaTotal(double subtotal, double desconto);      // aplica o desconto ao subtotal
-
-// ===================== MENU =====================
-
-void mostraMenuInicial() {                                  // inicio da funcao do menu (nao devolve nada)
-
-    printf("\n========== MENU PRINCIPAL ==========\n");      // mostra o titulo do menu
-    printf("1 - Cadastrar cliente\n");                       // opcao 1
-    printf("2 - Cadastrar produto\n");                       // opcao 2
-    printf("3 - Listar clientes\n");                         // opcao 3
-    printf("4 - Listar produtos\n");                         // opcao 4
-    printf("5 - Efetuar venda\n");                           // opcao 5
-    printf("0 - Sair do programa\n");                        // opcao 0 (encerra o programa)
-    printf("Opcao: ");                                       // pergunta qual opcao o usuario quer
-}                                                            // fim de mostraMenuInicial
+    #include <stdio.h>
+
+    struct telefones {       
+        char fixo[15];        // struct de registros dos telefones dos clientes (fixo e movel).
+        char movel[16];       
+    };                       
+
+    struct clientes {         
+        int codigo;        
+        char nome[50];       // struct que registra os dados de um cliente (codigo, nome, cpf, sexo, telefones).
+        double cpf;           
+        char sexo;            
+        struct telefones tel; 
+    };    
+
+    struct produtos {         // struct que registra os dados de um produto (codigo, nome, modelo, valor).
+        int codigo;           // codigo do produto que é calculado pelo hash
+        char nome[20];      
+        struct modelos modelo;
+        double valor;       
+    };               
+
+    struct modelos {          
+        char marca[20];       // struct de registro com marca e modelo de um produto (Dell/Precision).
+        char modelo[20];      
+    };                       
+
+
+    struct carrinhos {                 // registro da venda que esta sendo feita
+        struct clientes cliente;       // cliente para quem a venda esta sendo feita
+        struct produtos produto[3];    // ate 3 tipos de produto no carrinho
+        int quantidade[3];             // quantidade de cada produto (mesma posicao do vetor produto)
+        double subtotal;               // soma de (quantidade * valor) de todos os itens
+        double desconto;               // desconto em porcentagem (10 significa 10%)
+        double total;                  // valor final: subtotal menos o desconto
+    };                                 // fim da struct carrinhos
+
+    // Prototipo avisa ao compilador que a funcao existe, antes de ela ser escrita mais abaixo.
+
+    void mostraMenuInicial();                                   // funcao que mostra o menu
+    struct clientes cadastrarCliente();                         // le os dados e devolve um cliente
+    int geraCodigoCliente(double cpf);                          // recebe o CPF e devolve o codigo
+    void listarClientes(struct clientes cliente[3]);            // mostra todos os clientes
+    struct produtos cadastrarProduto();                         // le os dados e devolve um produto
+    int geraCodigoProduto(char nomeProduto[30]);                // recebe as 4 letras e devolve o codigo (hash)
+    void listarProdutos(struct produtos produto[10]);           // mostra todos os produtos
+    void efetuarVenda(struct clientes cliente[3], struct produtos produto[10], struct carrinhos carrinho); // monta a venda
+    struct clientes localizaCliente(int codigo, struct clientes cliente[3]);   // procura cliente pelo codigo
+    struct produtos localizaProduto(int codigo, struct produtos produto[10]);  // procura produto pelo codigo
+    void finalizarVenda(struct carrinhos carrinho);             // pede desconto, calcula e mostra os totais
+    void listarCarrinho(struct carrinhos carrinho);             // mostra cliente e itens do carrinho
+    double calculaSubtotal(struct carrinhos carrinho);          // soma os itens do carrinho
+    double calculaTotal(double subtotal, double desconto);      // aplica o desconto ao subtotal
 
-// ===================== CLIENTES =====================
 
-int geraCodigoCliente(double cpf) {                          // recebe o CPF e devolve um int
+    void mostraMenuInicial() {                                  // inicio da funcao do menu (nao devolve nada)
 
-    // O CPF tem 11 digitos: dividir por 100000 deixa os 6 primeiros
-    return (int)(cpf / 100000.0);                            // divide, converte para int (corta a parte decimal) e devolve
-}                                                            // fim de geraCodigoCliente
 
-struct clientes cadastrarCliente() {                         // le um cliente do teclado e devolve a struct pronta
+        printf("  +========================+\n"); 
+        printf("  |       MENU PRINCIPAL   |\n");      // mostra o titulo do menu
+        printf("  +========================+\n"); 
+        printf("  |  1 - Cadastrar cliente |\n");  
+        printf("  |  2 - Cadastrar produto |\n");             
+        printf("  |  3 - Listar clientes   |\n");                    
+        printf("  |  4 - Listar produtos   |\n");                  
+        printf("  |  5 - Efetuar venda     |\n");                     
+        printf("  |  0 - Sair do programa  |\n");                 
+        printf("  +========================+\n"); 
+        printf("Opção: ");                                
+    }                                                         
 
-    struct clientes c = {0};                                 // cria um cliente c com tudo zerado
-    char numeros[16] = {0};                                  // texto temporario para guardar os digitos do telefone
+    // ===================== CLIENTES =====================
 
-    printf("\n--- CADASTRO DE CLIENTE ---\n");               // titulo da tela de cadastro
+    int geraCodigoCliente(double cpf) {                          // recebe o CPF e devolve um int
 
-    printf("Nome: ");                                        // pede o nome
-    scanf(" %49[^\n]", c.nome);                              // le ate 49 letras ate o Enter (aceita espacos; o espaco inicial ignora Enter antigo)
+        // O CPF tem 11 digitos: dividir por 100000 deixa os 6 primeiros
+        return (int)(cpf / 100000.0);                            // divide, converte para int (corta a parte decimal) e devolve
+    }                                                            // fim de geraCodigoCliente
 
-    printf("CPF (somente numeros): ");                       // pede o CPF
-    scanf("%lf", &c.cpf);                                    // le o numero como double (%lf) e guarda em c.cpf
+    struct clientes cadastrarCliente() {                         // le um cliente do teclado e devolve a struct pronta
 
-    printf("Sexo (M/F): ");                                  // pede o sexo
-    scanf(" %c", &c.sexo);                                   // le uma letra (o espaco antes de %c ignora Enter antigo)
+        struct clientes c = {0};                                 // cria um cliente c com tudo zerado
+        char numeros[16] = {0};                                  // texto temporario para guardar os digitos do telefone
 
-    printf("Telefone fixo (DDD + numero, somente numeros): ");   // pede o telefone fixo
-    scanf("%15s", numeros);                                  // le ate 15 caracteres sem espaco para o texto temporario
-    sprintf(c.tel.fixo, "(%.2s) %.4s-%.4s",                  // monta o texto com mascara dentro de c.tel.fixo
-            numeros, numeros + 2, numeros + 6);              // 2 primeiros digitos (DDD), 4 do meio e 4 finais
+        printf("\n--- CADASTRO DE CLIENTE ---\n");               // titulo da tela de cadastro
 
-    printf("Telefone movel (DDD + numero, somente numeros): ");  // pede o celular
-    scanf("%15s", numeros);                                  // le os digitos do celular para o texto temporario
-    sprintf(c.tel.movel, "(%.2s) %.5s-%.4s",                 // monta o texto com mascara dentro de c.tel.movel
-            numeros, numeros + 2, numeros + 7);              // 2 do DDD, 5 do meio e 4 finais
+        printf("Nome: ");                                        // pede o nome
+        scanf(" %49[^\n]", c.nome);                              // le ate 49 letras ate o Enter (aceita espacos; o espaco inicial ignora Enter antigo)
 
-    c.codigo = geraCodigoCliente(c.cpf);                     // calcula o codigo a partir do CPF e guarda
+        printf("CPF (somente numeros): ");                       // pede o CPF
+        scanf("%lf", &c.cpf);                                    // le o numero como double (%lf) e guarda em c.cpf
 
-    return c;                                                // devolve o cliente completo para quem chamou
-}                                                            // fim de cadastrarCliente
+        printf("Sexo (M/F): ");                                  // pede o sexo
+        scanf(" %c", &c.sexo);                                   // le uma letra (o espaco antes de %c ignora Enter antigo)
 
-void listarClientes(struct clientes cliente[3]) {            // mostra os clientes do vetor
+        printf("Telefone fixo (DDD + numero, somente numeros): ");   // pede o telefone fixo
+        scanf("%15s", numeros);                                  // le ate 15 caracteres sem espaco para o texto temporario
+        sprintf(c.tel.fixo, "(%.2s) %.4s-%.4s",                  // monta o texto com mascara dentro de c.tel.fixo
+                numeros, numeros + 2, numeros + 6);              // 2 primeiros digitos (DDD), 4 do meio e 4 finais
 
-    printf("\n--- CLIENTES CADASTRADOS ---\n");              // titulo da listagem
+        printf("Telefone movel (DDD + numero, somente numeros): ");  // pede o celular
+        scanf("%15s", numeros);                                  // le os digitos do celular para o texto temporario
+        sprintf(c.tel.movel, "(%.2s) %.5s-%.4s",                 // monta o texto com mascara dentro de c.tel.movel
+                numeros, numeros + 2, numeros + 7);              // 2 do DDD, 5 do meio e 4 finais
 
-    for (int i = 0; i < 3; i++) {                            // percorre as 3 posicoes do vetor
+        c.codigo = geraCodigoCliente(c.cpf);                     // calcula o codigo a partir do CPF e guarda
 
-        if (cliente[i].codigo != 0) {                        // so mostra posicoes preenchidas (vazias tem codigo 0)
+        return c;                                                // devolve o cliente completo para quem chamou
+    }                                                            // fim de cadastrarCliente
 
-            printf("\nCodigo: %d\n", cliente[i].codigo);     // mostra o codigo
-            printf("Nome: %s\n", cliente[i].nome);           // mostra o nome
-            printf("CPF: %.0f\n", cliente[i].cpf);           // mostra o CPF sem casas decimais
-            printf("Sexo: %c\n", cliente[i].sexo);           // mostra o sexo
-            printf("Telefone fixo: %s\n", cliente[i].tel.fixo);    // mostra o fixo
-            printf("Telefone movel: %s\n", cliente[i].tel.movel);  // mostra o celular
-        }                                                    // fim do if
-    }                                                        // fim do for
-}                                                            // fim de listarClientes
+    void listarClientes(struct clientes cliente[3]) {            // mostra os clientes do vetor
 
-struct clientes localizaCliente(int codigo, struct clientes cliente[3]) {  // procura um cliente pelo codigo
+        printf("\n--- CLIENTES CADASTRADOS ---\n");              // titulo da listagem
 
-    for (int i = 0; i < 3; i++) {                            // percorre as 3 posicoes
+        for (int i = 0; i < 3; i++) {                            // percorre as 3 posicoes do vetor
 
-        if (cliente[i].codigo == codigo) {                   // se o codigo da posicao for o procurado
-            return cliente[i];                               // devolve esse cliente e encerra a funcao
-        }                                                    // fim do if
-    }                                                        // fim do for
+            if (cliente[i].codigo != 0) {                        // so mostra posicoes preenchidas (vazias tem codigo 0)
 
-    struct clientes vazio = {0};                             // se nao achou, cria um cliente zerado
-<<<<<<< HEAD
+                printf("\nCodigo: %d\n", cliente[i].codigo);     // mostra o codigo
+                printf("Nome: %s\n", cliente[i].nome);           // mostra o nome
+                printf("CPF: %.0f\n", cliente[i].cpf);           // mostra o CPF sem casas decimais
+                printf("Sexo: %c\n", cliente[i].sexo);           // mostra o sexo
+                printf("Telefone fixo: %s\n", cliente[i].tel.fixo);    // mostra o fixo
+                printf("Telefone movel: %s\n", cliente[i].tel.movel);  // mostra o celular
+            }                                                    // fim do if
+        }                                                        // fim do for
+    }                                                            // fim de listarClientes
 
-=======
->>>>>>> 3d8c438833f509d42dc7d4e92a25fa5cb0a8c1b2
-    return vazio;                                            // e devolve ele
-}                                                            // fim de localizaCliente
+    struct clientes localizaCliente(int codigo, struct clientes cliente[3]) {  // procura um cliente pelo codigo
 
-// ===================== PRODUTOS =====================
+        for (int i = 0; i < 3; i++) {                            // percorre as 3 posicoes
 
-int geraCodigoProduto(char nomeProduto[30]) {                // recebe 4 letras e devolve o codigo do produto
+            if (cliente[i].codigo == codigo) {                   // se o codigo da posicao for o procurado
+                return cliente[i];                               // devolve esse cliente e encerra a funcao
+            }                                                    // fim do if
+        }                                                        // fim do for
 
-    // nomeProduto traz os 2 primeiros caracteres da marca
-    // seguidos dos 2 primeiros caracteres do modelo (ex.: "DEPR")
+        struct clientes vazio = {0};                             // se nao achou, cria um cliente zerado
 
-    int C1 = nomeProduto[0];                                 // 1a letra como numero da tabela ASCII
-    int C2 = nomeProduto[1];                                 // 2a letra como numero ASCII
-    int C3 = nomeProduto[2];                                 // 3a letra como numero ASCII
-    int C4 = nomeProduto[3];                                 // 4a letra como numero ASCII
+        return vazio;                                            // e devolve ele
+    }                                                            // fim de localizaCliente
 
-    return C1 * 31 * 31 * 31 + C2 * 31 * 31 + C3 * 31 + C4;  // formula do hash do enunciado: C1*31^3 + C2*31^2 + C3*31 + C4
-}                                                            // fim de geraCodigoProduto
+    // ===================== PRODUTOS =====================
 
-struct produtos cadastrarProduto() {                         // le um produto do teclado e devolve a struct pronta
+    int geraCodigoProduto(char nomeProduto[30]) {                // recebe 4 letras e devolve o codigo do produto
 
-    struct produtos p = {0};                                 // cria um produto p zerado
-    char letras[30] = {0};                                   // texto que vai guardar as 4 letras para o hash
+        // nomeProduto traz os 2 primeiros caracteres da marca
+        // seguidos dos 2 primeiros caracteres do modelo (ex.: "DEPR")
 
-    printf("\n--- CADASTRO DE PRODUTO ---\n");               // titulo da tela de cadastro
+        int C1 = nomeProduto[0];                                 // 1a letra como numero da tabela ASCII
+        int C2 = nomeProduto[1];                                 // 2a letra como numero ASCII
+        int C3 = nomeProduto[2];                                 // 3a letra como numero ASCII
+        int C4 = nomeProduto[3];                                 // 4a letra como numero ASCII
 
-    printf("Nome do produto: ");                             // pede o nome
-    scanf(" %19[^\n]", p.nome);                              // le ate 19 letras (aceita espacos)
+        return C1 * 31 * 31 * 31 + C2 * 31 * 31 + C3 * 31 + C4;  // formula do hash do enunciado: C1*31^3 + C2*31^2 + C3*31 + C4
+    }                                                        
 
-    printf("Marca: ");                                       // pede a marca
-    scanf(" %19[^\n]", p.modelo.marca);                      // le a marca
+    struct produtos cadastrarProduto() {                         // le um produto do teclado e devolve a struct pronta
 
-    printf("Modelo: ");                                      // pede o modelo
-    scanf(" %19[^\n]", p.modelo.modelo);                     // le o modelo
+        struct produtos p = {0};                                 // cria um produto p zerado
+        char letras[30] = {0};                                   // texto que vai guardar as 4 letras para o hash
 
-    printf("Valor: R$ ");                                    // pede o preco
-    scanf("%lf", &p.valor);                                  // le o preco como double
+        printf("\n--- CADASTRO DE PRODUTO ---\n");               // titulo da tela de cadastro
 
-    letras[0] = p.modelo.marca[0];                           // 1a letra da marca
-    letras[1] = p.modelo.marca[1];                           // 2a letra da marca
-    letras[2] = p.modelo.modelo[0];                          // 1a letra do modelo
-    letras[3] = p.modelo.modelo[1];                          // 2a letra do modelo
+        printf("Nome do produto: ");                             // pede o nome
+        scanf(" %19[^\n]", p.nome);                              // le ate 19 letras (aceita espacos)
 
-    p.codigo = geraCodigoProduto(letras);                    // calcula o codigo (hash) e guarda
+        printf("Marca: ");                                       // pede a marca
+        scanf(" %19[^\n]", p.modelo.marca);                      // le a marca
 
-    return p;                                                // devolve o produto completo
-}                                                            // fim de cadastrarProduto
+        printf("Modelo: ");                                      // pede o modelo
+        scanf(" %19[^\n]", p.modelo.modelo);                     // le o modelo
 
-void listarProdutos(struct produtos produto[10]) {           // mostra os produtos do vetor
+        printf("Valor: R$ ");                                    // pede o preco
+        scanf("%lf", &p.valor);                                  // le o preco como double
 
-<<<<<<< HEAD
-    printf("\n--- PRODUTOS CADASTRADOS ---\n");              // titulo da listagem
-=======
-    printf("\n--- PRODUTOS CADASTRADOS ---\n");            
->>>>>>> 3d8c438833f509d42dc7d4e92a25fa5cb0a8c1b2
+        letras[0] = p.modelo.marca[0];                           // 1a letra da marca
+        letras[1] = p.modelo.marca[1];                           // 2a letra da marca
+        letras[2] = p.modelo.modelo[0];                          // 1a letra do modelo
+        letras[3] = p.modelo.modelo[1];                          // 2a letra do modelo
 
-    for (int i = 0; i < 10; i++) {                           // percorre as 10 posicoes
+        p.codigo = geraCodigoProduto(letras);                    // calcula o codigo (hash) e guarda
 
-        if (produto[i].codigo != 0) {                        // so mostra posicoes preenchidas
+        return p;                                                // devolve o produto completo
+    }                                                            // fim de cadastrarProduto
 
-<<<<<<< HEAD
-            printf("\nCodigo: %d\n", produto[i].codigo);                 // mostra o codigo
-            printf("Nome: %s\n", produto[i].nome);                       // mostra o nome
-            printf("Marca: %s\n", produto[i].modelo.marca);              // mostra a marca
-            printf("Modelo: %s\n", produto[i].modelo.modelo);            // mostra o modelo
-            printf("Valor: R$ %.2f\n", produto[i].valor);                // mostra o valor com 2 casas decimais
-        }                                                    // fim do if
-    }                                                        // fim do for
-}                                                            // fim de listarProdutos
-=======
-            printf("\nCodigo: %d\n", produto[i].codigo);              
-            printf("Nome: %s\n", produto[i].nome);                      
-            printf("Marca: %s\n", produto[i].modelo.marca);              
-            printf("Modelo: %s\n", produto[i].modelo.modelo);           
-            printf("Valor: R$ %.2f\n", produto[i].valor);               
-        }                                                   
-    }                                                       
-}                                                         
->>>>>>> 3d8c438833f509d42dc7d4e92a25fa5cb0a8c1b2
+    void listarProdutos(struct produtos produto[10]) {           // mostra os produtos do vetor
 
-struct produtos localizaProduto(int codigo, struct produtos produto[10]) {  // procura um produto pelo codigo
+        printf("\n--- PRODUTOS CADASTRADOS ---\n");              // titulo da listagem
 
-    for (int i = 0; i < 10; i++) {                           // percorre as 10 posicoes
-<<<<<<< HEAD
+        for (int i = 0; i < 10; i++) {                           // percorre as 10 posicoes
 
-=======
->>>>>>> 3d8c438833f509d42dc7d4e92a25fa5cb0a8c1b2
-        if (produto[i].codigo == codigo) {                   // se o codigo da posicao for o procurado
-            return produto[i];                               // devolve esse produto e encerra a funcao
-        }                                                    // fim do if
-    }                                                        // fim do for
-<<<<<<< HEAD
+            if (produto[i].codigo != 0) {                        // so mostra posicoes preenchidas
 
-    struct produtos vazio = {0};                             // se nao achou, cria um produto zerado
+                printf("\nCodigo: %d\n", produto[i].codigo);                 // mostra o codigo
+                printf("Nome: %s\n", produto[i].nome);                       // mostra o nome
+                printf("Marca: %s\n", produto[i].modelo.marca);              // mostra a marca
+                printf("Modelo: %s\n", produto[i].modelo.modelo);            // mostra o modelo
+                printf("Valor: R$ %.2f\n", produto[i].valor);                // mostra o valor com 2 casas decimais
+            }                                                    // fim do if
+        }                                                        // fim do for
+    }                                                            // fim de listarProdutos
 
-=======
-    struct produtos vazio = {0};                             // se nao achou, cria um produto zerado
->>>>>>> 3d8c438833f509d42dc7d4e92a25fa5cb0a8c1b2
-    return vazio;                                            // e devolve ele
-}                                                            // fim de localizaProduto
+    struct produtos localizaProduto(int codigo, struct produtos produto[10]) {  // procura um produto pelo codigo
 
-// ===================== VENDA =====================
+        for (int i = 0; i < 10; i++) {                           // percorre as 10 posicoes
 
-double calculaSubtotal(struct carrinhos carrinho) {          // soma o valor de todos os itens do carrinho
-<<<<<<< HEAD
+            if (produto[i].codigo == codigo) {                   // se o codigo da posicao for o procurado
+                return produto[i];                               // devolve esse produto e encerra a funcao
+            }                                                    // fim do if
+        }                                                        // fim do for
 
-=======
->>>>>>> 3d8c438833f509d42dc7d4e92a25fa5cb0a8c1b2
-    double soma = 0;                                         // acumulador comeca em zero
+        struct produtos vazio = {0};                             // se nao achou, cria um produto zerado
 
-    for (int i = 0; i < 3; i++) {                            // percorre os 3 itens possiveis
-        soma += carrinho.quantidade[i] * carrinho.produto[i].valor;   // soma quantidade * valor (itens vazios valem 0)
-    }                                                        // fim do for
-<<<<<<< HEAD
+        return vazio;                                            // e devolve ele
+    }                                                            // fim de localizaProduto
 
-=======
->>>>>>> 3d8c438833f509d42dc7d4e92a25fa5cb0a8c1b2
-    return soma;                                             // devolve o subtotal
-}                                                            // fim de calculaSubtotal
+    // ===================== VENDA =====================
 
-double calculaTotal(double subtotal, double desconto) {      // aplica o desconto percentual
-<<<<<<< HEAD
+    double calculaSubtotal(struct carrinhos carrinho) {          // soma o valor de todos os itens do carrinho
 
-=======
->>>>>>> 3d8c438833f509d42dc7d4e92a25fa5cb0a8c1b2
-    return subtotal - (subtotal * desconto / 100.0);         // subtotal menos a parte do desconto (10 vira 10%)
-}                                                            // fim de calculaTotal
+        double soma = 0;                                         // acumulador comeca em zero
 
-void listarCarrinho(struct carrinhos carrinho) {             // mostra o resumo do carrinho
+        for (int i = 0; i < 3; i++) {                            // percorre os 3 itens possiveis
+            soma += carrinho.quantidade[i] * carrinho.produto[i].valor;   // soma quantidade * valor (itens vazios valem 0)
+        }                                                        // fim do for
 
-    printf("\n========== RESUMO DA COMPRA ==========\n");    // titulo do resumo
+        return soma;                                             // devolve o subtotal
+    }                                                            // fim de calculaSubtotal
 
-    printf("Cliente: %s (codigo %d)\n",                      // mostra os dados do cliente da venda
-           carrinho.cliente.nome,                            // nome do cliente (preenche o %s)
-           carrinho.cliente.codigo);                         // codigo do cliente (preenche o %d)
+    double calculaTotal(double subtotal, double desconto) {      // aplica o desconto percentual
 
-    for (int i = 0; i < 3; i++) {                            // percorre os 3 itens possiveis
-<<<<<<< HEAD
+        return subtotal - (subtotal * desconto / 100.0);         // subtotal menos a parte do desconto (10 vira 10%)
+    }                                                            // fim de calculaTotal
 
-=======
->>>>>>> 3d8c438833f509d42dc7d4e92a25fa5cb0a8c1b2
-        if (carrinho.quantidade[i] > 0) {                    // so mostra itens que foram adicionados
+    void listarCarrinho(struct carrinhos carrinho) {             // mostra o resumo do carrinho
 
-            printf("\nProduto: %s (%s %s)\n",                // mostra nome, marca e modelo
-                   carrinho.produto[i].nome,                 // nome do produto
-                   carrinho.produto[i].modelo.marca,         // marca do produto
-                   carrinho.produto[i].modelo.modelo);       // modelo do produto
+        printf("\n========== RESUMO DA COMPRA ==========\n");    // titulo do resumo
 
-            printf("Valor unitario: R$ %.2f\n", carrinho.produto[i].valor);   // valor de uma unidade
-            printf("Quantidade: %d\n", carrinho.quantidade[i]);               // quantas unidades
-            printf("Total do item: R$ %.2f\n",                                // total do item
-                   carrinho.quantidade[i] * carrinho.produto[i].valor);       // quantidade * valor
-        }                                                    // fim do if
-    }                                                        // fim do for
-}                                                            // fim de listarCarrinho
+        printf("Cliente: %s (codigo %d)\n",                      // mostra os dados do cliente da venda
+            carrinho.cliente.nome,                            // nome do cliente (preenche o %s)
+            carrinho.cliente.codigo);                         // codigo do cliente (preenche o %d)
 
-void finalizarVenda(struct carrinhos carrinho) {             // fecha a venda: desconto, subtotal e total
+        for (int i = 0; i < 3; i++) {                            // percorre os 3 itens possiveis
 
-    listarCarrinho(carrinho);                                // primeiro mostra cliente e itens
+            if (carrinho.quantidade[i] > 0) {                    // so mostra itens que foram adicionados
 
-    printf("\nDesconto em porcentagem (ex.: 10 para 10%%): ");   // pede o desconto (%% imprime o simbolo %)
-    scanf("%lf", &carrinho.desconto);                        // le o desconto e guarda no carrinho
+                printf("\nProduto: %s (%s %s)\n",                // mostra nome, marca e modelo
+                    carrinho.produto[i].nome,                 // nome do produto
+                    carrinho.produto[i].modelo.marca,         // marca do produto
+                    carrinho.produto[i].modelo.modelo);       // modelo do produto
 
-    carrinho.subtotal = calculaSubtotal(carrinho);           // calcula e guarda o subtotal
-<<<<<<< HEAD
+                printf("Valor unitario: R$ %.2f\n", carrinho.produto[i].valor);   // valor de uma unidade
+                printf("Quantidade: %d\n", carrinho.quantidade[i]);               // quantas unidades
+                printf("Total do item: R$ %.2f\n",                                // total do item
+                    carrinho.quantidade[i] * carrinho.produto[i].valor);       // quantidade * valor
+            }                                                    // fim do if
+        }                                                        // fim do for
+    }                                                            // fim de listarCarrinho
 
-=======
->>>>>>> 3d8c438833f509d42dc7d4e92a25fa5cb0a8c1b2
-    carrinho.total = calculaTotal(carrinho.subtotal, carrinho.desconto);  // calcula e guarda o total com desconto
+    void finalizarVenda(struct carrinhos carrinho) {             // fecha a venda: desconto, subtotal e total
 
-    printf("\nSubtotal: R$ %.2f\n", carrinho.subtotal);      // mostra o subtotal
-    printf("Desconto: %.2f%% (R$ %.2f)\n",                   // mostra o desconto em % e em reais
-           carrinho.desconto,                                // porcentagem do desconto
-           carrinho.subtotal * carrinho.desconto / 100.0);   // valor do desconto em reais
-    printf("Total: R$ %.2f\n", carrinho.total);              // mostra o total a pagar
-<<<<<<< HEAD
+        listarCarrinho(carrinho);                                // primeiro mostra cliente e itens
 
-=======
->>>>>>> 3d8c438833f509d42dc7d4e92a25fa5cb0a8c1b2
-    printf("\nVenda finalizada!\n");                         // avisa que acabou
-}                                                            // fim de finalizarVenda
+        printf("\nDesconto em porcentagem (ex.: 10 para 10%%): ");   // pede o desconto (%% imprime o simbolo %)
+        scanf("%lf", &carrinho.desconto);                        // le o desconto e guarda no carrinho
 
-void efetuarVenda(struct clientes cliente[3], struct produtos produto[10], struct carrinhos carrinho) {  // monta a venda
+        carrinho.subtotal = calculaSubtotal(carrinho);           // calcula e guarda o subtotal
 
-    int codigo;                                              // guarda o codigo digitado (cliente e produtos)
-    int item = 0;                                            // posicao atual do carrinho (0, 1 ou 2)
+        carrinho.total = calculaTotal(carrinho.subtotal, carrinho.desconto);  // calcula e guarda o total com desconto
 
-    printf("\n--- EFETUAR VENDA ---\n");                     // titulo da venda
+        printf("\nSubtotal: R$ %.2f\n", carrinho.subtotal);      // mostra o subtotal
+        printf("Desconto: %.2f%% (R$ %.2f)\n",                   // mostra o desconto em % e em reais
+            carrinho.desconto,                                // porcentagem do desconto
+            carrinho.subtotal * carrinho.desconto / 100.0);   // valor do desconto em reais
+        printf("Total: R$ %.2f\n", carrinho.total);              // mostra o total a pagar
 
-    listarClientes(cliente);                                 // mostra os clientes para o usuario escolher
+        printf("\nVenda finalizada!\n");                         // avisa que acabou
+    }                                                            // fim de finalizarVenda
 
-    printf("\nCodigo do cliente: ");                         // pede o codigo do cliente
-    scanf("%d", &codigo);                                    // le o codigo
-<<<<<<< HEAD
+    void efetuarVenda(struct clientes cliente[3], struct produtos produto[10], struct carrinhos carrinho) {  // monta a venda
 
-    carrinho.cliente = localizaCliente(codigo, cliente);     // busca o cliente e coloca no carrinho
+        int codigo;                                              // guarda o codigo digitado (cliente e produtos)
+        int item = 0;                                            // posicao atual do carrinho (0, 1 ou 2)
 
-    while (item < 3) {                                       // repete enquanto o carrinho tem espaco (max. 3 tipos)
+        printf("\n--- EFETUAR VENDA ---\n");                     // titulo da venda
 
-        listarProdutos(produto);                             // mostra os produtos para escolher
+        listarClientes(cliente);                                 // mostra os clientes para o usuario escolher
 
-=======
-    carrinho.cliente = localizaCliente(codigo, cliente);     // busca o cliente e coloca no carrinho
+        printf("\nCodigo do cliente: ");                         // pede o codigo do cliente
+        scanf("%d", &codigo);                                    // le o codigo
 
-    while (item < 3) {                                       // repete enquanto o carrinho tem espaco (max. 3 tipos)
-        listarProdutos(produto);                             // mostra os produtos para escolher
->>>>>>> 3d8c438833f509d42dc7d4e92a25fa5cb0a8c1b2
-        printf("\nCodigo do produto (0 para finalizar): ");  // pede o codigo do produto
-        scanf("%d", &codigo);                                // le o codigo
+        carrinho.cliente = localizaCliente(codigo, cliente);     // busca o cliente e coloca no carrinho
 
-        if (codigo == 0) {                                   // se digitou 0...
-            break;                                           // ...sai do laco e vai finalizar a venda
-        }                                                    // fim do if
-<<<<<<< HEAD
+        while (item < 3) {                                       // repete enquanto o carrinho tem espaco (max. 3 tipos)
 
-        carrinho.produto[item] = localizaProduto(codigo, produto);   // busca o produto e coloca na posicao atual do carrinho
+            listarProdutos(produto);                             // mostra os produtos para escolher
 
-        printf("Quantidade: ");                              // pede a quantidade
-        scanf("%d", &carrinho.quantidade[item]);             // le e guarda na mesma posicao do produto
+            printf("\nCodigo do produto (0 para finalizar): ");  // pede o codigo do produto
+            scanf("%d", &codigo);                                // le o codigo
 
-        item++;                                              // avanca para a proxima posicao do carrinho
-    }                                                        // fim do while
+            if (codigo == 0) {                                   // se digitou 0...
+                break;                                           // ...sai do laco e vai finalizar a venda
+            }                                                    // fim do if
 
-=======
-        carrinho.produto[item] = localizaProduto(codigo, produto);   // busca o produto e coloca na posicao atual do carrinho
-        printf("Quantidade: ");                              // pede a quantidade
-        scanf("%d", &carrinho.quantidade[item]);             // le e guarda na mesma posicao do produto
-        item++;                                              // avanca para a proxima posicao do carrinho
-    }                                                        // fim do while
->>>>>>> 3d8c438833f509d42dc7d4e92a25fa5cb0a8c1b2
-    finalizarVenda(carrinho);                                // calcula e mostra os valores finais
-}                                                            // fim de efetuarVenda
+            carrinho.produto[item] = localizaProduto(codigo, produto);   // busca o produto e coloca na posicao atual do carrinho
 
-// ===================== PROGRAMA PRINCIPAL =====================
+            printf("Quantidade: ");                              // pede a quantidade
+            scanf("%d", &carrinho.quantidade[item]);             // le e guarda na mesma posicao do produto
 
-int main() {                                                 // onde o programa comeca
+            item++;                                              // avanca para a proxima posicao do carrinho
+        }                                                        // fim do while
 
-    struct clientes cliente[3] = {0};                        // vetor de 3 clientes, todos zerados
-    struct produtos produto[10] = {0};                       // vetor de 10 produtos, todos zerados
-    struct carrinhos carrinho = {0};                         // um carrinho zerado
-<<<<<<< HEAD
+        finalizarVenda(carrinho);                                // calcula e mostra os valores finais
+    }                                                            // fim de efetuarVenda
 
-=======
->>>>>>> 3d8c438833f509d42dc7d4e92a25fa5cb0a8c1b2
-    int qtdClientes = 0;                                     // quantos clientes ja foram cadastrados
-    int qtdProdutos = 0;                                     // quantos produtos ja foram cadastrados
-    int opcao;                                               // opcao escolhida no menu
+    // ===================== PROGRAMA PRINCIPAL =====================
 
-    do {                                                     // repete o menu pelo menos uma vez
-<<<<<<< HEAD
+    int main() {                                                 // onde o programa comeca
 
-=======
->>>>>>> 3d8c438833f509d42dc7d4e92a25fa5cb0a8c1b2
-        mostraMenuInicial();                                 // mostra o menu
-        scanf("%d", &opcao);                                 // le a opcao digitada
+        struct clientes cliente[3] = {0};                        // vetor de 3 clientes, todos zerados
+        struct produtos produto[10] = {0};                       // vetor de 10 produtos, todos zerados
+        struct carrinhos carrinho = {0};                         // um carrinho zerado
 
-        if (opcao == 1) {                                    // opcao 1: cadastrar cliente
+        int qtdClientes = 0;                                     // quantos clientes ja foram cadastrados
+        int qtdProdutos = 0;                                     // quantos produtos ja foram cadastrados
+        int opcao;                                               // opcao escolhida no menu
 
-            if (qtdClientes < 3) {                           // se ainda cabe cliente no vetor
-                cliente[qtdClientes] = cadastrarCliente();   // cadastra na proxima posicao livre
-                qtdClientes++;                               // conta mais um cliente
-            } else {                                         // se o vetor esta cheio
-                printf("\nLimite de clientes atingido!\n");  // avisa o usuario
-<<<<<<< HEAD
-            }                                                // fim do if/else interno
+        do {                                                     // repete o menu pelo menos uma vez
 
-        } else if (opcao == 2) {                             // opcao 2: cadastrar produto
+            mostraMenuInicial();                                 // mostra o menu
+            scanf("%d", &opcao);                                 // le a opcao digitada
 
-            if (qtdProdutos < 10) {                          // se ainda cabe produto no vetor
-                produto[qtdProdutos] = cadastrarProduto();   // cadastra na proxima posicao livre
-                qtdProdutos++;                               // conta mais um produto
-            } else {                                         // se o vetor esta cheio
-                printf("\nLimite de produtos atingido!\n");  // avisa o usuario
-            }                                                // fim do if/else interno
+            if (opcao == 1) {                                    // opcao 1: cadastrar cliente
 
-        } else if (opcao == 3) {                             // opcao 3: listar clientes
+                if (qtdClientes < 3) {                           // se ainda cabe cliente no vetor
+                    cliente[qtdClientes] = cadastrarCliente();   // cadastra na proxima posicao livre
+                    qtdClientes++;                               // conta mais um cliente
+                } else {                                         // se o vetor esta cheio
+                    printf("\nLimite de clientes atingido!\n");  // avisa o usuario
+                }                                                // fim do if/else interno
 
-            listarClientes(cliente);                         // mostra os clientes
+            } else if (opcao == 2) {                             // opcao 2: cadastrar produto
 
-        } else if (opcao == 4) {                             // opcao 4: listar produtos
+                if (qtdProdutos < 10) {                          // se ainda cabe produto no vetor
+                    produto[qtdProdutos] = cadastrarProduto();   // cadastra na proxima posicao livre
+                    qtdProdutos++;                               // conta mais um produto
+                } else {                                         // se o vetor esta cheio
+                    printf("\nLimite de produtos atingido!\n");  // avisa o usuario
+                }                                                // fim do if/else interno
 
-            listarProdutos(produto);                         // mostra os produtos
+            } else if (opcao == 3) {                             // opcao 3: listar clientes
 
-        } else if (opcao == 5) {                             // opcao 5: efetuar venda
+                listarClientes(cliente);                         // mostra os clientes
 
-            efetuarVenda(cliente, produto, carrinho);        // inicia a venda
+            } else if (opcao == 4) {                             // opcao 4: listar produtos
 
-        } else if (opcao != 0) {                             // qualquer outro numero diferente de 0
+                listarProdutos(produto);                         // mostra os produtos
 
-            printf("\nOpcao invalida!\n");                   // avisa que a opcao nao existe
-        }                                                    // fim da cadeia de if/else
+            } else if (opcao == 5) {                             // opcao 5: efetuar venda
 
-    } while (opcao != 0);                                    // volta ao menu enquanto a opcao nao for 0
+                efetuarVenda(cliente, produto, carrinho);        // inicia a venda
 
-    printf("\nFIM DO PROGRAMA!\n");                          // mensagem ao sair
+            } else if (opcao != 0) {                             // qualquer outro numero diferente de 0
 
-    return 0;                                                // informa ao sistema que terminou sem erro
-}                                                            // fim de main
-=======
-            }                                                
+                printf("\nOpcao invalida!\n");                   // avisa que a opcao nao existe
+            }                                                    // fim da cadeia de if/else
 
-        } else if (opcao == 2) {                         
-            if (qtdProdutos < 10) {                          // se ainda cabe produto no vetor, cadastra na proxima posicao livre e conta mais um produto
-                produto[qtdProdutos] = cadastrarProduto();   
-                qtdProdutos++;                               
-            } else {                                         // se o vetor estiver cheio, o programa vai avisar o usuario
-                printf("\nLimite de produtos atingido!\n");  
-            }                                               
+        } while (opcao != 0);                                    // volta ao menu enquanto a opcao nao for 0
 
-        } else if (opcao == 3) {                          
-            listarClientes(cliente);                         // mostra os clientes que estao no programa
+        printf("\nFIM DO PROGRAMA!\n");                          // mensagem ao sair
 
-        } else if (opcao == 4) {                           
-            listarProdutos(produto);                         // mostra os produtos que estao inclusas no programa 
-
-        } else if (opcao == 5) {                            
-            efetuarVenda(cliente, produto, carrinho);        // inicia a venda
-
-        } else if (opcao != 0) {                          
-            printf("\nOpcao invalida!\n");                  
-        }                                                
-
-    } while (opcao != 0);                                    // volta ao menu enquanto a opcao nao for 0
-
-    printf("\nFIM DO PROGRAMA!\n");                     
-    return 0;                                              
-}                                                       
->>>>>>> 3d8c438833f509d42dc7d4e92a25fa5cb0a8c1b2
+        return 0;                                                // informa ao sistema que terminou sem erro
+    }                                                            // fim de main
